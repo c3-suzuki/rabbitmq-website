@@ -427,6 +427,16 @@ management.oauth_provider_url = https://my-web-portal
 With the previous settings, the management UI exposes the HTTP endpoint `/login` which accepts `content-type: application/x-www-form-urlencoded` and it expects the JWT token in the `access_token` form field. This is the endpoint where the Web portal will redirect users to the management UI.
 Additionally, RabbitMQ also accepts a JWT token in the HTTP `Authorization` header when the user lands on the management UI.
 
+
+### Support multiple OAuth resources
+
+Typically, RabbitMQ is configured with a single OAuth 2.0 resource.
+The resource's identifier is configured in `auth_oauth2.resource_server_id`. Furthermore, there is just a single Authorization server configured in `management.oauth_provider_url`, and similarly a single `oauth_client_id`.
+
+What happens when the OAuth 2.0 plugin is configured with multiple resources? We need to configure the management ui with all the resources we want to support. There is no longer a single `auth_oauth2.resource_server_id` but pontentially many.
+
+
+
 ## <a id="http-api" class="anchor" href="#http-api">HTTP API</a>
 
 ### <a id="http-api-endpoints" class="anchor" href="#http-api-endpoints">API Endpoints</a>
