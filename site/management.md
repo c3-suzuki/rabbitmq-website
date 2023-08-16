@@ -321,7 +321,7 @@ assumes that the `resource_server_id` configured in the oauth2 backend matches t
 
 > **Important**: `management.oauth_client_secret` is an optional setting. UAA 75.21.0 and earlier versions require `oauth_client_secret` regardless if the oauth client is configured as confidental.
 
-### Allow Basic and OAuth 2 authentication
+### Allow Basic and OAuth 2 authentication for Management HTTP API
 
 When using `management.oauth_enabled = true`, it is still possible to authenticate
 with [HTTP basic authentication](https://en.wikipedia.org/wiki/Basic_access_authentication)
@@ -338,15 +338,13 @@ as well as
 curl -i --header "authorization: Basic &lt;encoded credentials&gt;" http://localhost:15672/api/vhosts
 </pre>
 
-To switch to authenticate using OAuth 2 exclusively for management UI access, set the
+To switch to authenticate using OAuth 2 exclusively for management http access, set the
 `management.disable_basic_auth` configuration key to `true`:
 
 <pre class="lang-ini">
+...
 management.disable_basic_auth = true
-management.oauth_client_id = rabbit_user_client
-management.oauth_client_secret = rabbit_user_client
-management.oauth_provider_url = https://my-uaa-server-host:8443/uaa
-management.oauth_scopes = openid profile rabbitmq.*
+...
 </pre>
 
 When setting `management.disable_basic_auth` to `true`, only the `Bearer` (token-based) authorization method will
@@ -359,6 +357,24 @@ curl -i --header "authorization: Bearer &lt;token&gt;" http://localhost:15672/ap
 
 This is true for all endpoints except `GET /definitions` and `POST /definitions`. Those
 endpoints require the token to be passed in the `token` query string parameter.
+
+### Allow Basic and OAuth 2 authentication for Management UI
+
+When using `management.oauth_enabled = true`, it is still possible to authenticate
+with [HTTP basic authentication](https://en.wikipedia.org/wiki/Basic_access_authentication)
+in the Management UI. When both methods are allowed, the Management UI offers the user to either
+enter the uername/pasword or instead click on button **Click here to login** for OAuth2 Authentication.
+
+By the default, `management.oauth_disable_basic_auth` has value `true`, meaning that when OAuth2 is
+enabled, the Management UI only accepts OAuth2 authentication.
+To switch to authenticate using OAuth 2 or Basic Auth, set the
+ `management.oauth_disable_basic_auth` configuration key to `false`:
+
+<pre class="lang-ini">
+...
+management.oauth_disable_basic_auth = false
+...
+</pre>
 
 ### Configure which scopes RabbitMQ requests to the authorization server
 
