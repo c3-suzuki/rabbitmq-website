@@ -27,6 +27,7 @@ This guide covers
  * [Usage](#usage)
     * [Variables Configurable in rabbitmq.conf](#variables-configurable)
     * [Resource Server ID and Scope Prefixes](#resource-server-id)
+    * [Multiple Resource Server(s)](#multiple-resource-servers)
     * [Token validation](#token-validation)
     * [Scope-to-Permission Translation](#scope-translation)
     * [Topic Exchange scopes](#topic-exchange-scopes)
@@ -181,23 +182,40 @@ NOTE: `jwks_url` takes precedence over `signing_keys` if both are provided.
 
 ### <a id="variables-configurable" class="anchor" href="#variables-configurable">Variables Configurable in rabbitmq.conf</a>
 
-| Key                                      | Documentation
-|------------------------------------------|-----------
-| `auth_oauth2.resource_server_id`         | [The Resource Server ID](#resource-server-id-and-scope-prefixes)
-| `auth_oauth2.resource_server_type`       | [The Resource Server Type](#rich-authorization-request)
-| `auth_oauth2.additional_scopes_key`      | Configure the plugin to also look in other fields (maps to `additional_rabbitmq_scopes` in the old format). |
-| `auth_oauth2.scope_prefix`               | Configure prefix for all scopes. Default value is  `auth_oauth2.resource_server_id` followed by the dot `.` character. |
-| `auth_oauth2.preferred_username_claims`  | List of JWT claims to look for username associated to the token separated by commas.
-| `auth_oauth2.default_key`                | ID of the default signing key.
-| `auth_oauth2.signing_keys`               | Paths to signing key files.
-| `auth_oauth2.jwks_url`                   | The URL of key server. According to the [JWT Specification](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.2) key server URL must be https.
-| `auth_oauth2.https.cacertfile`           | Path to a file containing PEM-encoded CA certificates. The CA certificates are used during key server [peer verification](https://rabbitmq.com/ssl.html#peer-verification).
-| `auth_oauth2.https.depth`                | The maximum number of non-self-issued intermediate certificates that may follow the peer certificate in a valid [certification path](https://rabbitmq.com/ssl.html#peer-verification-depth). Default is 10.
-| `auth_oauth2.https.peer_verification`    | Should [peer verification](https://rabbitmq.com/ssl.html#peer-verification) be enabled. Available values: `verify_none`, `verify_peer`. Default is `verify_none`. It is recommended to configure `verify_peer`. Peer verification requires a certain amount of setup and is more secure.
-| `auth_oauth2.https.fail_if_no_peer_cert` | Used together with `auth_oauth2.https.peer_verification = verify_peer`. When set to `true`, TLS connection will be rejected if client fails to provide a certificate. Default is `false`.
-| `auth_oauth2.https.hostname_verification`| Enable wildcard-aware hostname verification for key server. Available values: `wildcard`, `none`. Default is `none`.
-| `auth_oauth2.algorithms`                 | Restrict [the usable algorithms](https://github.com/potatosalad/erlang-jose#algorithm-support).
-| `auth_oauth2.verify_aud`                 | [Verify token's `aud`](#token-validation).
+| Key                                        | Documentation
+|--------------------------------------------|-----------
+| `auth_oauth2.resource_server_id`           | [The Resource Server ID](#resource-server-id-and-scope-prefixes)
+| `auth_oauth2.resource_server_type`         | [The Resource Server Type](#rich-authorization-request)
+| `auth_oauth2.additional_scopes_key`        | Configure the plugin to also look in other fields (maps to `additional_rabbitmq_scopes` in the old format). |
+| `auth_oauth2.scope_prefix`                 | Configure prefix for all scopes. Default value is  `auth_oauth2.resource_server_id` followed by the dot `.` character. |
+| `auth_oauth2.preferred_username_claims`    | List of JWT claims to look for username associated to the token separated by commas.
+| `auth_oauth2.default_key`                  | ID of the default signing key.
+| `auth_oauth2.signing_keys`                 | Paths to signing key files.
+| `auth_oauth2.jwks_url`                     | The URL of key server. According to the [JWT Specification](https://datatracker.ietf.org/doc/html/rfc7515#section-4.1.2) key server URL must be https.
+| `auth_oauth2.https.cacertfile`             | Path to a file containing PEM-encoded CA certificates. The CA certificates are used during key server [peer verification](https://rabbitmq.com/ssl.html#peer-verification).
+| `auth_oauth2.https.depth`                  | The maximum number of non-self-issued intermediate certificates that may follow the peer certificate in a valid [certification path](https://rabbitmq.com/ssl.html#peer-verification-depth). Default is 10.
+| `auth_oauth2.https.peer_verification`      | Should [peer verification](https://rabbitmq.com/ssl.html#peer-verification) be enabled. Available values: `verify_none`, `verify_peer`. Default is `verify_none`. It is recommended to configure `verify_peer`. Peer verification requires a certain amount of setup and is more secure.
+| `auth_oauth2.https.fail_if_no_peer_cert`   | Used together with `auth_oauth2.https.peer_verification = verify_peer`. When set to `true`, TLS connection will be rejected if client fails to provide a certificate. Default is `false`.
+| `auth_oauth2.https.hostname_verification`  | Enable wildcard-aware hostname verification for key server. Available values: `wildcard`, `none`. Default is `none`.
+| `auth_oauth2.algorithms`                   | Restrict [the usable algorithms](https://github.com/potatosalad/erlang-jose#algorithm-support).
+| `auth_oauth2.verify_aud`                   | [Verify token's `aud`](#token-validation).
+| `auth_oauth2.resource_servers`             | Configure multiple OAuth 2.0 resources.
+
+Each `auth_oauth2.resource_servers.<index>.` have the following settings:
+
+* `id`
+* `resource_server_type`
+* `additional_scopes_key`  
+* `scope_prefix`  
+* `preferred_username_claims`
+* `jwks_url`
+* `https.cacertfile`
+* `https.depth`
+* `https.peer_verification`
+* `https.fail_if_no_peer_cert`
+* `https.hostname_verification`
+
+Typically, a numeric value is used as `index`, e.g.  `auth_oauth2.resource_servers.1.id = rabbit_prod`. However, it can be any string, e.g. `auth_oauth2.resource_servers.rabbit_prod.jwks_url = http://some_url`. By default, the `index` is the resource server's id. However, you can override it via the `id` attribute like in `auth_oauth2.resource_servers.1.id = rabbit_prod`.
 
 For example:
 
@@ -241,6 +259,27 @@ auth_oauth2.scope_prefix = api://
 ...
 </pre>
 
+
+### <a id="multiple-resource-servers" class="anchor" href="#multiple-resource-servers">Multiple Resource Server(s)</a>
+
+There are environments where RabbitMQ is either accessed by users registered in different Identity Providers or those users refer to RabbitMQ with different *Audience*(s). For these environments, RabbitMQ OAuth 2.0 plugin and the Management plugin can be configured with multiple OAuth 2.0 resources.
+
+Below is the OAuth 2.0 plugin configuration for two resources with the ids, `rabbit_prod` and `rabbit_dev`. Both resources (a.k.a. *audience*) are managed by the same Identity Provider whose JWKS is `http//some_idp_url/keyset`.
+
+<pre class="lang-ini">
+auth_oauth2.jwks_url = http//some_idp_url/keyset
+auth_oauth2.scope_prefix = rabbitmq.
+
+auth_oauth2.resource_servers.1.id = rabbit_prod
+auth_oauth2.resource_servers.2.id = rabbit_dev
+auth_oauth2.resource_servers.2.scope_prefix = dev-rabbitmq.
+</pre>
+
+All `auth_oauth2` settings such as `jwks_url`, `scope_prefix` are still supported when configuring multiple resources. Their values are used as default values. For instance, `rabbit_prod` takes its `scope_prefix` from `auth_oauth2.scope_prefix`. However, `rabbit_dev` configures its own `scope_prefix`.
+
+Once RabbitMQ sees one resource configured under `auth_oauth2.resource_servers`, it ignores `auth_oauth2.resource_server_id` if present.
+
+**NOTE**: It is possible to configure `jwks_url` on each individual resource via the `auth_oauth2.resource_servers.$.jwks_url` setting, however it is not possible to configure the signing key files except under `auth_oauth2.signing_keys`.
 
 ### <a id="token-validation" class="anchor" href="#token-validation">Token validation</a>
 

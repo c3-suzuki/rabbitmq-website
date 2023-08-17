@@ -433,7 +433,7 @@ Additionally, RabbitMQ also accepts a JWT token in the HTTP `Authorization` head
 
 RabbitMQ 3.x introduced support for multiple OAuth 2.0 resources in the OAuth 2.0 plugin and in the Management plugin.
 
-Once you have configured the [OAuth 2.0 plugin](oauth2.html#?) with all the required OAuth 2.0 resources, you configure them in the Management plugin. There is no need to configure all of them if you only want to make the Management UI accessible via a single or fewer OAuth 2.0 resources though.
+Once you have configured the [OAuth 2.0 plugin](oauth2.html#multiple-resource-servers) with all the required OAuth 2.0 resources, you configure them in the Management plugin. There is no need to configure all of them if you only want to make the Management UI accessible via a single or fewer OAuth 2.0 resources though.
 
 Say you have the following OAuth 2.0 plugin configuration:
 <pre class="lang-ini">
