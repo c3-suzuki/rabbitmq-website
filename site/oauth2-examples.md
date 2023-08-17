@@ -39,6 +39,7 @@ accompanied by [a public GitHub repository](https://github.com/rabbitmq/rabbitmq
     - [OAuth2 Proxy](./oauth2-examples-proxy.html)
     - [Okta](./oauth2-examples-okta.html)
     - [Google](./oauth2-examples-google.html)  **NOT SUPPORTED**
+    - [Multiple OAuth 2.0 servers and/or audiences](./oauth2-examples-multiresource.html)
 
 <!-- /TOC -->
 
