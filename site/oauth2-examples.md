@@ -435,8 +435,8 @@ There are two ways to configure RabbitMQ with multiple signing keys:
 First you add a second signing key called `legacy-token-2-key` whose public key is `conf/public-2.pem`:
 
 <pre class="lang-bash">
-docker exec -it rabbitmq rabbitmqctl add_uaa_key legacy-token-2-key --pem-file=/conf/public-2.pem
-Adding UAA signing key "legacy-token-2-key" filename: "/conf/public-2.pem"
+docker exec -it rabbitmq rabbitmqctl add_signing_key legacy-token-2-key --pem-file=/conf/public-2.pem
+Adding OAuth signing key "legacy-token-2-key" filename: "/conf/public-2.pem"
 </pre>
 
 And then you issue a token using the corresponding private key and use it to access the management endpoint `/api/overview`.
@@ -911,7 +911,7 @@ curl 'http://localhost:8080/uaa/token_key' -i  -H 'Accept: application/json' -u 
 
 When UAA rotates the signing key you need to reconfigure RabbitMQ with that key. You don't need to edit the configuration and restart RabbitMQ.
 
-Instead, thru the `rabbitmqctl add_uaa_key` command you can add more keys. This is more or less what could happen.
+Instead, thru the `rabbitmqctl add_signing_key` command you can add more keys. This is more or less what could happen.
 
 1. UAA starts up with a signing key called "key-1"
 2. You configure RabbitMQ with the signing key "key-1" following the procedure explained in the previous section
@@ -924,7 +924,7 @@ Instead, thru the `rabbitmqctl add_uaa_key` command you can add more keys. This 
 9. You add the new signing key via the `rabbitmqctl` command
 10. This time RabbitMQ can validate tokens signed with "key-2"
 
-One way to keep RabbitMQ up-to-date is to periodically check with [token keys endpoint](https://docs.cloudfoundry.org/api/uaa/version/4.28.0/index.html#token-keys) (using the `E-tag` header). When the list of active tokens key has changed, you retrieve them and add them using `rabbitmqctl add_uaa_key`.
+One way to keep RabbitMQ up-to-date is to periodically check with [token keys endpoint](https://docs.cloudfoundry.org/api/uaa/version/4.28.0/index.html#token-keys) (using the `E-tag` header). When the list of active tokens key has changed, you retrieve them and add them using `rabbitmqctl add_signing_key`.
 
 You are probably missing the ability to remove deprecated/obsolete signing keys.
 The [function](https://github.com/rabbitmq/rabbitmq-auth-backend-oauth2/blob/master/src/uaa_jwt.erl) is there so you could potentially invoke it via `rabbitmqctl eval` command.
