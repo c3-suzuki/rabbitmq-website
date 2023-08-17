@@ -24,6 +24,7 @@ accompanied by [a public GitHub repository](https://github.com/rabbitmq/rabbitmq
 	  - [AMQP protocol](#amqp-protocol)
 	  - [JMS protocol](#jms-protocol)
 	  - [MQTT protocol](#mqtt-protocol)
+    - [AMQP 1.0 protocol](#amqp10-protocol)
 * [Use advanced OAuth 2.0 configuration](#advanced-configuration)
 	- [Use custom scope field](#use-custom-scope-field)
 	- [Use multiple asymmetrical signing keys](#use-multiple-asymmetrical-signing-keys)
@@ -368,6 +369,32 @@ make start-mqtt-publish TOKEN=$(bin/jwt_token scopes-for-mqtt.json legacy-token-
 > IMPORTANT: If you try to access the Management UI and authenticate with UAA using rabbit_admin you
 wont be able to do bind a queue with routing_key `test` to the `amq.topic` exchange because that user
 in UAA does not have the required permissions. In our handcrafted token, you have granted ourselves the right permissions/scopes.
+
+### <a id="amqp10-protocol" class="anchor" href="#amqp10-protocol">AMQP 1.0 protocol</a>
+
+In this use case you are demonstrating a basic AMQP 1.0 application which reads, via an environment variable (`PASSWORD`),
+the JWT token that will use as password when authenticating with RabbitMQ.
+
+Before testing a publisher and a subscriber application you need to build a local image for the
+basic AMQP 1.0 application by invoking this command:
+<pre class="lang-bash">
+make build-amqp1_0-client
+</pre>
+
+Launch RabbitMQ with the following command. It will start RabbitMQ configured with UAA as its Authorization Server.
+<pre class="lang-bash">
+make start-rabbitmq
+</pre>
+
+Launch UAA.
+<pre class="lang-bash">
+make start-uaa
+</pre>
+
+And send a message. It uses the *client_id*  `jms_producer`, declared in UAA, to obtain a token:
+<pre class="lang-bash">
+make start-amqp1_0-publisher
+</pre>
 
 ## <a id="advanced-configuration" class="anchor" href="#advanced-configuration">Use advanced OAuth 2.0 configuration</a>
 
