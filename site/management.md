@@ -362,12 +362,13 @@ endpoints require the token to be passed in the `token` query string parameter.
 
 When using `management.oauth_enabled = true`, it is still possible to authenticate
 with [HTTP basic authentication](https://en.wikipedia.org/wiki/Basic_access_authentication)
-in the Management UI. When both methods are allowed, the Management UI offers the user to either
-enter the uername/pasword or instead click on button **Click here to login** for OAuth2 Authentication.
+in the Management UI. When both methods are allowed, the user can
+enter its username/password or instead click on the button **Click here to login** for OAuth 2.0 Authentication like shown below.
+<img src="./img/oauth2/management-oauth-with-basic-auth.png" alt="Single OAuth 2.0 resource, with oauth_disable_basic_auth = false" style="width:75%;height:75%"/>
 
-By the default, `management.oauth_disable_basic_auth` has value `true`, meaning that when OAuth2 is
-enabled, the Management UI only accepts OAuth2 authentication.
-To switch to authenticate using OAuth 2 or Basic Auth, set the
+By the default, `management.oauth_disable_basic_auth` has the value `true`, meaning that when OAuth2 is
+enabled, the Management UI only accepts OAuth 2 authentication.
+To switch to authenticate using OAuth 2 abd Basic Auth, set the
  `management.oauth_disable_basic_auth` configuration key to `false`:
 
 <pre class="lang-ini">
@@ -382,8 +383,8 @@ It is possible to configure which OAuth 2.0 scopes RabbitMQ should claim when re
 
 If `management.oauth_enabled = true` and `management.oauth_scopes` is not set, RabbitMQ default to `openid profile`.
 
-Depending on the Authorization server, we may use regular expression in scopes, e.g. <*resource_server_id*>`.*`, or
-instead we have to explicitly ask for them, e.g.:
+Depending on the Authorization server, you may use regular expression in scopes, e.g. <*resource_server_id*>`.*`, or
+instead you have to explicitly ask for them, e.g.:
   * <*resource_server_id*>`.tag:administrator`
   * <*resource_server_id*>`.read:*/*/*`
 
@@ -428,13 +429,57 @@ With the previous settings, the management UI exposes the HTTP endpoint `/login`
 Additionally, RabbitMQ also accepts a JWT token in the HTTP `Authorization` header when the user lands on the management UI.
 
 
-### Support multiple OAuth resources
+### Support multiple OAuth 2.0 resources
 
-Typically, RabbitMQ is configured with a single OAuth 2.0 resource.
-The resource's identifier is configured in `auth_oauth2.resource_server_id`. Furthermore, there is just a single Authorization server configured in `management.oauth_provider_url`, and similarly a single `oauth_client_id`.
+RabbitMQ 3.x introduced support for multiple OAuth 2.0 resources in the OAuth 2.0 plugin and in the Management plugin.
 
-What happens when the OAuth 2.0 plugin is configured with multiple resources? We need to configure the management ui with all the resources we want to support. There is no longer a single `auth_oauth2.resource_server_id` but pontentially many.
+Once you have configured the [OAuth 2.0 plugin](oauth2.html#?) with all the required OAuth 2.0 resources, you configure them in the Management plugin. There is no need to configure all of them if you only want to make the Management UI accessible via a single or fewer OAuth 2.0 resources though.
 
+Say you have the following OAuth 2.0 plugin configuration:
+<pre class="lang-ini">
+auth_oauth2.jwks_url = http://some_idp_url/keyset
+auth_oauth2.scope_prefix = rabbitmq.
+auth_oauth2.resource_servers.1.id = rabbit_prod
+auth_oauth2.resource_servers.2.id = rabbit_dev
+auth_oauth2.resource_servers.3.id = rabbit_qa
+auth_oauth2.resource_servers.3.jwks_url = http://qa_idp/keyset
+</pre>
+
+Say for instance, you want to expose the two OAuth 2.0 resources, `rabbit_prod` and `rabbit_dev`, via the standard OAuth 2.0 Authorization Code flow (i.e. Service-Provider initiated flow which is the default flow). And the OAuth 2.0 resource, `rabbit_qa`, is also exposed by the Management UI by via the Identity-Provider initiated flow. `rabbit_prod` and `rabbit_dev` use their own OAuth `client_id`. The `label` attribute is the text displayed in the Management UI.
+
+<pre class="lang-ini">
+management.oauth_provider_url = http://some_idp_url
+management.oauth_initiated_logon_type = sp_initiated
+
+management.oauth_resource_servers.1.id = rabbit_prod
+management.oauth_resource_servers.1.client_id = rabbit_prod_mgt_ui
+management.oauth_resource_servers.1.label = RabbitMQ Production
+
+management.oauth_resource_servers.2.id = rabbit_dev
+management.oauth_resource_servers.2.client_id = rabbit_dev_mgt_ui
+management.oauth_resource_servers.2.label = RabbitMQ Development
+
+management.oauth_resource_servers.3.id = rabbit_qa
+management.oauth_resource_servers.3.label = RabbitMQ QA
+management.oauth_resource_servers.3.initiated_logon_type = idp_initiated
+management.oauth_resource_servers.3.provider_url = http://qa_url
+
+</pre>
+
+Similarly, the default scopes for all resources are configured in `management.oauth_scopes` however, `rabbit_dev` overrides it.
+<pre class="lang-ini">
+management.oauth_scopes = openid profile rabbitmq.tag:management
+
+management.oauth_resource_servers.2.scopes = openid profile rabbitmq.tag:management
+</pre>
+
+This is the Management UI layout for the above configuration with Basic Authentication disabled (`management.oauth_disable_basic_auth = true`).
+
+<img src="./img/oauth2/management-oauth-many.png" alt="More than one OAuth 2.0 resource, with oauth_disable_basic_auth = true" style="width:75%;height:75%"/>
+
+And this is the Management UI with Basic Authentication enabled (`management.oauth_disable_basic_auth = false`).
+
+<img src="./img/oauth2/management-oauth-many-with-basic-auth.png" alt="More than one OAuth 2.0 resource, with oauth_disable_basic_auth = false" style="width:75%;height:75%"/>
 
 
 ## <a id="http-api" class="anchor" href="#http-api">HTTP API</a>
