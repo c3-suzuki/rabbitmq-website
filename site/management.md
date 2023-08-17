@@ -368,7 +368,7 @@ enter its username/password or instead click on the button **Click here to login
 
 By the default, `management.oauth_disable_basic_auth` has the value `true`, meaning that when OAuth2 is
 enabled, the Management UI only accepts OAuth 2 authentication.
-To switch to authenticate using OAuth 2 abd Basic Auth, set the
+To switch to authenticate using OAuth 2 and Basic Auth, set the
  `management.oauth_disable_basic_auth` configuration key to `false`:
 
 <pre class="lang-ini">
@@ -433,9 +433,9 @@ Additionally, RabbitMQ also accepts a JWT token in the HTTP `Authorization` head
 
 RabbitMQ 3.x introduced support for multiple OAuth 2.0 resources in the OAuth 2.0 plugin and in the Management plugin.
 
-Once you have configured the [OAuth 2.0 plugin](oauth2.html#multiple-resource-servers) with all the required OAuth 2.0 resources, you configure them in the Management plugin. There is no need to configure all of them if you only want to make the Management UI accessible via a single or fewer OAuth 2.0 resources though.
+Once you have configured the [OAuth 2.0 plugin](oauth2.html#multiple-resource-servers) with all the required OAuth 2.0 resources, you can make them available in the Management plugin.
 
-Say you have the following OAuth 2.0 plugin configuration:
+Say you have the following OAuth 2.0 plugin configuration which consists of three OAuth2 resources:
 <pre class="lang-ini">
 auth_oauth2.jwks_url = http://some_idp_url/keyset
 auth_oauth2.scope_prefix = rabbitmq.
@@ -445,7 +445,7 @@ auth_oauth2.resource_servers.3.id = rabbit_qa
 auth_oauth2.resource_servers.3.jwks_url = http://qa_idp/keyset
 </pre>
 
-Say for instance, you want to expose the two OAuth 2.0 resources, `rabbit_prod` and `rabbit_dev`, via the standard OAuth 2.0 Authorization Code flow (i.e. Service-Provider initiated flow which is the default flow). And the OAuth 2.0 resource, `rabbit_qa`, is also exposed by the Management UI by via the Identity-Provider initiated flow. `rabbit_prod` and `rabbit_dev` use their own OAuth `client_id`. The `label` attribute is the text displayed in the Management UI.
+Say for instance, you want to expose the two OAuth 2.0 resources, `rabbit_prod` and `rabbit_dev`, via the standard OAuth 2.0 Authorization Code flow (i.e. using the *Service-Provider initiated flow* which is the default flow). And you also want to expose the OAuth 2.0 resource, `rabbit_qa`, but via the *Identity-Provider initiated flow*. `rabbit_prod` and `rabbit_dev` use their own OAuth `client_id`. The Management UI prompts the user to choose one of the available OAuth 2.0 resources. To render the name of each resource, it uses the `label` attribute or else the `id` attribute or else the value in the index (i.e. `rabbit_prod` for `management.oauth_resource_servers.rabbit_prod.client_id = rabbit_prod_mgt_ui`).
 
 <pre class="lang-ini">
 management.oauth_provider_url = http://some_idp_url
@@ -473,7 +473,7 @@ management.oauth_scopes = openid profile rabbitmq.tag:management
 management.oauth_resource_servers.2.scopes = openid profile rabbitmq.tag:management
 </pre>
 
-This is the Management UI layout for the above configuration with Basic Authentication disabled (`management.oauth_disable_basic_auth = true`).
+This is the Management UI layout for the above configuration with Basic Authentication disabled in the Management UI (`management.oauth_disable_basic_auth = true`).
 
 <img src="./img/oauth2/management-oauth-many.png" alt="More than one OAuth 2.0 resource, with oauth_disable_basic_auth = true" style="width:75%;height:75%"/>
 
