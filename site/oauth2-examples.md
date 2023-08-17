@@ -4,17 +4,11 @@
 
 This tutorial-style guide has two primary goals:
 
-1. Explore how applications and end users can [authenticate](./access-control.html) with RabbitMQ server using OAuth 2.0 protocol rather than
-   the traditional username/password pairs or x.509 certificates.
-2. Explore what it takes to set up RabbitMQ Server with OAuth 2.0 authentication mechanism.
-   Additionally it explains how to stand up ([UAA](https://github.com/cloudfoundry/uaa)) as an OAuth 2.0 Authorization Server and all the operations to create OAuth clients, users and obtain their tokens.
+1. Explore how applications and end users can [authenticate](./access-control.html) with RabbitMQ server using OAuth 2.0 protocol rather than the traditional username/password pairs or x.509 certificates.
+2. Explore what it takes to set up RabbitMQ Server with OAuth 2.0 authentication mechanism across several Authorization Servers.
 
-The guide covers several OAuth 2 usage scenarios in the context of RabbitMQ and is
-accompanied by [a public GitHub repository](https://github.com/rabbitmq/rabbitmq-oauth2-tutorial).
-The GitHub repository includes RabbitMQ and UAA configuration files, as well as Make targets
-that make it easier to
-
-To understand the details of how to configure RabbitMQ with Oauth2, go to the [Understand the environment](#understand-the-environment) section.
+The guide is
+accompanied by [a public GitHub repository](https://github.com/rabbitmq/rabbitmq-oauth2-tutorial) which hosts all the scripts required to deploy the examples demonstrated on the guide.
 
 ## <a id="toc" class="anchor" href="#toc">Table of Content</a>
 
@@ -26,10 +20,10 @@ To understand the details of how to configure RabbitMQ with Oauth2, go to the [U
     - [Service-Provider initiated logon](#service-provider-initiated-logon)
     - [Identity-Provider initiated logon](#identity-provider-initiated-logon)
 * [Access other protocols using OAuth 2.0 tokens](#access-other-protocols)    
-  - [Management REST api](#monitoring-agent-accessing-management-rest-api)
-	- [AMQP protocol](#amqp-protocol)
-	- [JMS protocol](#jms-protocol)
-	- [MQTT protocol](#mqtt-protocol)
+    - [Management REST api](#monitoring-agent-accessing-management-rest-api)
+	  - [AMQP protocol](#amqp-protocol)
+	  - [JMS protocol](#jms-protocol)
+	  - [MQTT protocol](#mqtt-protocol)
 * [Use advanced OAuth 2.0 configuration](#advanced-configuration)
 	- [Use custom scope field](#use-custom-scope-field)
 	- [Use multiple asymmetrical signing keys](#use-multiple-asymmetrical-signing-keys)

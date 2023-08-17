@@ -362,13 +362,13 @@ endpoints require the token to be passed in the `token` query string parameter.
 
 When using `management.oauth_enabled = true`, it is still possible to authenticate
 with [HTTP basic authentication](https://en.wikipedia.org/wiki/Basic_access_authentication)
-in the Management UI. When both methods are allowed, the user can
-enter its username/password or instead click on the button **Click here to login** for OAuth 2.0 Authentication like shown below.
-<img src="./img/oauth2/management-oauth-with-basic-auth.png" alt="Single OAuth 2.0 resource, with oauth_disable_basic_auth = false" style="width:75%;height:75%"/>
+in the Management UI.
 
-By the default, `management.oauth_disable_basic_auth` has the value `true`, meaning that when OAuth2 is
-enabled, the Management UI only accepts OAuth 2 authentication.
-To switch to authenticate using OAuth 2 and Basic Auth, set the
+By the default, `management.oauth_disable_basic_auth` has the value `true`, meaning that when OAuth 2 is
+enabled, the Management UI only accepts OAuth 2 authentication. The Management UI shows a button with the label **Click here to login** like shown in the screenshot below:
+<img src="./img/oauth2/management-oauth.png" alt="Single OAuth 2.0 resource, with oauth_disable_basic_auth = true" style="width:75%;height:75%"/>
+
+To switch to authenticate using OAuth 2 or Basic Authentication, set the
  `management.oauth_disable_basic_auth` configuration key to `false`:
 
 <pre class="lang-ini">
@@ -376,6 +376,10 @@ To switch to authenticate using OAuth 2 and Basic Auth, set the
 management.oauth_disable_basic_auth = false
 ...
 </pre>
+The Management UI shows now a username/password login form for Basic Authentication in addition to the **Click here to login** button for OAuth 2 authentication:
+
+<img src="./img/oauth2/management-oauth-with-basic-auth.png" alt="Single OAuth 2.0 resource, with oauth_disable_basic_auth = false" style="width:75%;height:75%"/>
+
 
 ### Configure which scopes RabbitMQ requests to the authorization server
 
