@@ -34,9 +34,9 @@ accompanied by [a public GitHub repository](https://github.com/rabbitmq/rabbitmq
 	- [Use Rich Authorization Requests tokens](#use-rar-tokens)
 * Use different OAuth 2.0 servers
 	- [KeyCloak](oauth2-examples-keycloak.html)
-	- [https://auth0.com/](oauth2-examples-oauth0.html)
+	- [https://auth0.com/](oauth2-examples-auth0.html)
 	- [Azure Active Directory](oauth2-examples-azure.html)  
-    - [OAuth2 Proxy](./oauth2-examples-proxy.html)
+    - [OAuth2 Proxy](./oauth2-examples-oauth2-proxy.html)
     - [Okta](./oauth2-examples-okta.html)
     - [Google](./oauth2-examples-google.html)  **NOT SUPPORTED**
     - [Multiple OAuth 2.0 servers and/or audiences](./oauth2-examples-multiresource.html)

@@ -1,5 +1,8 @@
 # Use OAuth2 Proxy and Keycloak as OAuth 2.0 server
 
+Demonstrate how to authenticate using OAuth 2.0 protocol
+and OAuth2 Proxy as Authorization Server on the following flows:
+
 Let's test the following flow:
 
 * Access the RabbitMQ Management UI using a browser through OAuth2 Proxy

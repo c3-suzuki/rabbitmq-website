@@ -1,8 +1,10 @@
 # Use multiple OAuth 2.0 servers and/or audiences
 
-You are going to test the following OAuth flows:
-1. Access AMQP protocol
-2. Access Management UI
+Demonstrate how to authenticate using OAuth 2.0 protocol
+and several OAuth resources managed on the following flows:
+
+* Access AMQP protocol
+* Access Management UI
 
 ## Prerequisites to follow this guide
 
@@ -10,7 +12,7 @@ You are going to test the following OAuth flows:
 
 ## Motivation
 
-All the examples and use-cases demonstrated by this tutorial, except for this use case, configure a single **resource_server_id** and therefore a single **OAuth 2.0 server**.
+All the examples demonstrated by this tutorial, except for this use case, configure a single **resource_server_id** and therefore a single **OAuth 2.0 server**.
 
 However, you could encounter scenarios where some management users and/or applications are registered in
 different OAuth2 servers or they could be registered on the same OAuth2 server however they could refer to RabbitMQ with different audience values. When this happens, you have to declare two OAuth2 resources in RabbitMQ, one for each audience.

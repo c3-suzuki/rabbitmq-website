@@ -1,6 +1,7 @@
 # Use https://auth0.com/ as OAuth 2.0 server
 
-Let's test the following 3 OAuth flows:
+Demonstrate how to authenticate using OAuth 2.0 protocol
+and Auth0 as Authorization Server on the following flows:
 
 * Access management UI via a browser
 * Access management rest api

@@ -1,6 +1,8 @@
-# Use Okta  as OAuth 2.0 server
+# Use Okta as OAuth 2.0 server
 
-You are going to test below OAuth 2.0 flow:
+Demonstrate how to authenticate using OAuth 2.0 protocol
+and Okta as Authorization Server on the following flows:
+
 1. Access management ui via a browser :ballot_box_with_check:
 
 ## Prerequisites to follow this guide
