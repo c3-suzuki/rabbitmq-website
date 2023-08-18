@@ -1,7 +1,7 @@
 # Use multiple OAuth 2.0 servers and/or audiences
 
 Demonstrate how to authenticate using OAuth 2.0 protocol
-and several OAuth resources on the following flows:
+and several OAuth resources using the following flows:
 
 * Access AMQP protocol
 * Access Management UI

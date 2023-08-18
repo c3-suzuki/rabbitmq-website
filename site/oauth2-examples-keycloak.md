@@ -1,7 +1,7 @@
 # Use KeyCloak as OAuth 2.0 server
 
 Demonstrate how to authenticate using OAuth 2.0 protocol
-and Keycloak as Authorization Server on the following flows:
+and Keycloak as Authorization Server using the following flows:
 
 * Access management UI via a browser
 * Access management rest api
