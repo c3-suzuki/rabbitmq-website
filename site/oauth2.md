@@ -217,9 +217,8 @@ Each `auth_oauth2.resource_servers.<index>.` have the following settings:
 
 Typically, a numeric value is used as `index`, e.g.  `auth_oauth2.resource_servers.1.id = rabbit_prod`. However, it can be any string, e.g. `auth_oauth2.resource_servers.rabbit_prod.jwks_url = http://some_url`. By default, the `index` is the resource server's id. However, you can override it via the `id` attribute like in `auth_oauth2.resource_servers.1.id = rabbit_prod`.
 
-For example:
+Here are two sample configuration. The first one configures two signing key files:
 
-Configure with key files
 <pre class="lang-ini">
 auth_oauth2.resource_server_id = new_resource_server_id
 auth_oauth2.additional_scopes_key = my_custom_scope_key
@@ -231,7 +230,8 @@ auth_oauth2.signing_keys.id2 = test/config_schema_SUITE_data/certs/cert.pem
 auth_oauth2.algorithms.1 = HS256
 auth_oauth2.algorithms.2 = RS256
 </pre>
-Configure with key server
+
+And a second one which configures a signing key server:
 <pre class="lang-ini">
 auth_oauth2.resource_server_id = new_resource_server_id
 auth_oauth2.jwks_url = https://my-jwt-issuer/jwks.json
@@ -262,11 +262,11 @@ auth_oauth2.scope_prefix = api://
 
 ### <a id="multiple-resource-servers" class="anchor" href="#multiple-resource-servers">Multiple Resource Server(s)</a>
 
-Typically, all users that access a RabbitMQ deployment are registered in the same Identity Provider. Furthermore, all tokens issued for the RabbitMQ deployment have the same *audience*, regardless of the user.
+Typically, all users that access a RabbitMQ installation are registered in the same Identity Provider. Furthermore, all tokens issued for the same RabbitMQ installation have the same *audience*.
 
-However, there are other use-cases where RabbitMQ is either accessed by users registered in different Identity Providers or tokens are issued for RabbitMQ using different *Audience*(s). For these environments, RabbitMQ OAuth 2.0 plugin and the Management plugin can be configured with multiple OAuth 2.0 resources.
+However, there are some use-cases where RabbitMQ is either accessed by users registered in different Identity Providers or tokens issued for the same RabbitMQ installation use different *Audience*(s). For these use-cases, RabbitMQ OAuth 2.0 plugin and the Management plugin can be configured with multiple OAuth 2.0 resources.
 
-Below is the OAuth 2.0 plugin configuration for two resources with the ids, `rabbit_prod` and `rabbit_dev`. Both resources (a.k.a. *audience*) are managed by the same Identity Provider whose JWKS is `http//some_idp_url/keyset`.
+Below is the OAuth 2.0 plugin configuration for two resources with the ids, `rabbit_prod` and `rabbit_dev`. Both resources (a.k.a. *audience*) are managed by the same Identity Provider whose JWKS (Signing Key server) is `http//some_idp_url/keyset`.
 
 <pre class="lang-ini">
 auth_oauth2.jwks_url = http//some_idp_url/keyset
@@ -282,6 +282,8 @@ All `auth_oauth2` settings such as `jwks_url`, `scope_prefix` are still supporte
 Once RabbitMQ sees one resource configured under `auth_oauth2.resource_servers`, it ignores `auth_oauth2.resource_server_id` if present.
 
 **NOTE**: It is possible to configure `jwks_url` on each individual resource via the `auth_oauth2.resource_servers.$.jwks_url` setting, however it is not possible to configure the signing key files except under `auth_oauth2.signing_keys`.
+
+**NOTE**: There is an [example](./oauth2-examples-multiresource.html) that demonstrate multiple OAuth 2 resources. 
 
 ### <a id="token-validation" class="anchor" href="#token-validation">Token validation</a>
 
