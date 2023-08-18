@@ -52,35 +52,16 @@ accompanied by [a public GitHub repository](https://github.com/rabbitmq/rabbitmq
 
 ## <a id="getting-started-with-uaa-and-rabbitmq" class="anchor" href="#getting-started-with-uaa-and-rabbitmq">Getting started with UAA and RabbitMQ</a>
 
-Before proceeding with other more sophisticated examples, let's start RabbitMQ configured with OAuth 2.0 plugin and
-[UAA](https://docs.cloudfoundry.org/concepts/architecture/uaa.html) as the OAuth 2.0 Authorization Server.
+To demonstrate OAuth 2.0 you need, at least, an OAuth 2.0 Authorization server and RabbitMQ appropriately configured for the chosen Authorization server. This guide uses [UAA](https://docs.cloudfoundry.org/concepts/architecture/uaa.html) as Authorization Server to demonstrate basic and advanced configuration to access to the Management UI and various messaging protocols.
 
-In the next section, you
-will see how to set up UAA and RabbitMQ. If you are new to OAuth 2.0, it is a good starting point. If you already know OAuth 2.0
-and you want to learn how to configure RabbitMQ to talk to one of OAuth 2.0 server tested on this tutorial, you can jump
-straight to them. They are:
+This guide also demonstrates how to configure RabbitMQ to use other Authorization Servers besides [UAA](https://docs.cloudfoundry.org/concepts/architecture/uaa.html) such as [KeyCloak](oauth2-examples-keycloak.html). The table of content of this guide has the full list of Authorization Servers.
 
-- [KeyCloak](./oauth2-examples-keycloak.html)
-- [https://auth0.com/](./oauth2-examples-oauth0.html)
-- [Azure Active Directory](./oauth2-examples-azure.html)
-- [UAA](#uaa-asymmetrical-signing-keys)
-
-
-#### <a id="uaa-asymmetrical-signing-keys" class="anchor" href="#uaa-asymmetrical-signing-keys">Use Asymmetrical Digital Singing Keys</a>
-
-There are two ways to set up OAuth 2.0 in RabbitMQ. One uses symmetrical signing keys. And the other uses
-asymmetrical signing keys. The Authorization server is who digitally signs the Access tokens and RabbitMQ
-has to be configured to validate any of the two types of digital signatures.
-
-Given that asymmetrical keys is the most widely used option, you are going to focus on how to
-configure RabbitMQ with them.
-
-Run the following 2 commands to get the environment ready to see Oauth 2.0 plugin in action:
+Run the following two commands to start UAA and RabbitMQ configured for UAA:
 
   1. `make start-uaa` to get UAA server running
   2. `make start-rabbitmq` to start RabbitMQ server
 
-The last command starts a RabbitMQ server with [specific configuration file](https://github.com/rabbitmq/rabbitmq-oauth2-tutorial/blob/main/conf/uaa/rabbitmq.config).
+The last command starts a RabbitMQ with [this configuration file](https://github.com/rabbitmq/rabbitmq-oauth2-tutorial/blob/main/conf/uaa/rabbitmq.config).
 
 ## <a id="access-management-ui" class="anchor" href="#access-management-ui">Access Management UI using OAuth 2.0 tokens</a>
 
